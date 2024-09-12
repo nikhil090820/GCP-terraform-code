@@ -1,3 +1,14 @@
+properties([
+    parameters([
+        string(
+            defaultValue: 'dev',
+            name: 'Environment'
+        ),
+        choice(
+            choices: ['plan', 'apply', 'destroy'], 
+            name: 'Terraform_Action'
+        )])
+])
 pipeline {
     agent any
  
@@ -54,7 +65,17 @@ pipeline {
                 script {
                     // Apply Terraform configurations
                     withCredentials([file(credentialsId: 'gcp-service-account-json', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
-                        sh 'terraform destroy -auto-approve'
+                        script {    
+                        if (params.Terraform_Action == 'plan') {
+                            sh "terraform plan"
+                        }   else if (params.Terraform_Action == 'apply') {
+                            sh "terraform apply -auto-approve"
+                        }   else if (params.Terraform_Action == 'destroy') {
+                            sh "terraform destroy -auto-approve"
+                        } else {
+                            error "Invalid value for Terraform_Action"
+                        }
+                    }
                     }
                 }
             }
