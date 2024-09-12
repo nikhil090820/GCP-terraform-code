@@ -125,7 +125,7 @@ resource "google_compute_instance" "public_vm" {
 
   network_interface {
     # subnetwork = google_compute_subnetwork.this_public.id
-    network = default
+    network = "default"
     access_config {
 
     }
