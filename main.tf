@@ -1,9 +1,3 @@
-#provider
-provider "google" {
-  project = "devops-171"
-  region  = "us-central1-a"
-}
-
 #service account 
 resource "google_service_account" "terraform-demo" {
   account_id   = "devops-project"
